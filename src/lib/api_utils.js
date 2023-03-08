@@ -45,7 +45,14 @@ export async function fetch_from_api(endpoint_name, params, callback) {
           if (data.error) {
             error_store.set(data.error.message);
           }
-          callback(data);
+          if (window.nominatim_ui_api_callback !== undefined
+              && window.nominatim_ui_api_callback instanceof Function) {
+            if (window.nominatim_ui_api_callback(endpoint_name, params, data, callback)) {
+              callback(data);
+            }
+          } else {
+            callback(data);
+          }
         }
         api_request_progress('finish');
       });

@@ -29,7 +29,13 @@
       zoom: Nominatim_Config.Map_Default_Zoom
     });
     if (typeof Nominatim_Config.Map_Default_Bounds !== 'undefined' && Nominatim_Config.Map_Default_Bounds) {
-      map.fitBounds(Nominatim_Config.Map_Default_Bounds);
+      var bounds;
+      if (Nominatim_Config.Map_Default_Bounds instanceof Function) {
+        bounds = Nominatim_Config.Map_Default_Bounds(map);
+      } else {
+        bounds = Nominatim_Config.Map_Default_Bounds;
+      }
+      map.fitBounds(bounds);
     }
 
     if (attribution && attribution.length) {
